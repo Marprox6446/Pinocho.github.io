@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edición del Catálogo</title>
+    <link rel="stylesheet" href="e.css"> <!-- Enlace al archivo CSS para estilos -->
+</head>
+<body>
+    <div class="container">
+        <h1>Edición del Catálogo</h1>
+        <button id="nuevoProductoBtn" class="button">Nuevo Producto</button> <!-- Botón para agregar nuevo producto -->
+
+        <!-- Tabla de productos -->
+        <table id="tablaProductos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se agregarán los productos dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario modal para agregar nuevo producto -->
+<!-- Formulario modal para agregar nuevo producto -->
+<div id="modalNuevoProducto" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Agregar Nuevo Producto</h2>
+        <form id="formularioNuevoProducto">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" required>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+            <label for="imagenProducto">Imagen del Producto:</label>
+            <input type="file" id="imagenProducto" name="imagenProducto">
+            <button type="submit" class="button">Guardar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Botón para ir al catálogo -->
+<button id="irAlCatalogoBtn" class="button">Ir al Catálogo</button>
+
+
+    <script src="e.js"></script> <!-- Enlace al archivo JavaScript para la funcionalidad -->
+</body>
+</html>

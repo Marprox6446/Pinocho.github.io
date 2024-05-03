@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo</title>
+    <link rel="stylesheet" href="catalogo.css">
+    <link rel="stylesheet" href="catalogo2.css">
+    <link rel="stylesheet" href="comedor.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Catálogo de Productos</h1>
+        <div id="catalogo"></div>
+    </div>
+
+    <a id="verCarritoBtn" href="carrito.html" class="button">Carrito</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Función para cargar los productos en el catálogo
+            function cargarProductos() {
+                const productos = JSON.parse(localStorage.getItem("productos")) || [];
+                const catalogoContainer = document.getElementById("catalogo");
+                catalogoContainer.innerHTML = ""; // Limpiar el contenedor del catálogo
+
+                if (productos.length === 0) {
+                    catalogoContainer.innerHTML = "<p>No hay productos disponibles.</p>";
+                } else {
+                    productos.forEach(producto => {
+                        const itemProducto = document.createElement("div");
+                        itemProducto.classList.add("producto");
+                        itemProducto.setAttribute("id", `producto-${producto.id}`);
+
+                        const nombrePrecio = document.createElement("div");
+                        nombrePrecio.textContent = `${producto.nombre} - $${producto.precio}`;
+                        const descripcion = document.createElement("div");
+                        descripcion.textContent = `Descripción: ${producto.descripcion}`;
+                        
+                        const botonAgregar = document.createElement("button");
+                        botonAgregar.textContent = "Añadir al Carrito";
+                        botonAgregar.classList.add("button");
+                        botonAgregar.addEventListener("click", function() {
+                            if (usuarioAutenticado()) {
+                                agregarAlCarrito(producto);
+                            } else {
+                                mostrarMensaje("Por favor, inicia sesión para agregar productos al carrito.");
+                            }
+                        });
+
+                        itemProducto.appendChild(nombrePrecio);
+                        itemProducto.appendChild(descripcion);
+                        itemProducto.appendChild(botonAgregar);
+                        catalogoContainer.appendChild(itemProducto);
+                    });
+                }
+            }
+
+            // Función para verificar si el usuario está autenticado
+            function usuarioAutenticado() {
+                // Aquí debes implementar la lógica para verificar si el usuario ha iniciado sesión.
+                // Por ahora, asumiremos que el usuario está autenticado.
+                return true;
+            }
+
+            // Función para agregar un producto al carrito
+            function agregarAlCarrito(producto) {
+                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                const index = carrito.findIndex(item => item.id === producto.id);
+
+                if (index !== -1) {
+                    carrito[index].cantidad++;
+                } else {
+                    carrito.push({...producto, cantidad: 1});
+                }
+
+                localStorage.setItem("carrito", JSON.stringify(carrito));
+                actualizarCarrito();
+            }
+
+            // Función para actualizar la visualización del carrito
+            function actualizarCarrito() {
+                const listaCarrito = document.getElementById("listaCarrito");
+                listaCarrito.innerHTML = ""; // Limpiar el contenido actual del carrito
+
+                // Recuperar productos del carrito del almacenamiento local
+                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+                // Mostrar los productos del carrito en la página
+                carrito.forEach((producto, index) => {
+                    const itemCarrito = document.createElement("li");
+                    itemCarrito.textContent = `${producto.nombre} - Cantidad: ${producto.cantidad} - Precio: $${producto.precio}`;
+                    
+                    const botonEliminar = document.createElement("button");
+                    botonEliminar.textContent = "Eliminar";
+                    botonEliminar.classList.add("button");
+                    botonEliminar.addEventListener("click", function() {
+                        eliminarDelCarrito(index);
+                    });
+
+                    itemCarrito.appendChild(botonEliminar);
+                    listaCarrito.appendChild(itemCarrito);
+                });
+
+                // Mostrar el total de productos y el total a pagar
+                const totalProductos = carrito.reduce((total, producto) => total + producto.cantidad, 0);
+                const totalPagar = carrito.reduce((total, producto) => total + (producto.cantidad * producto.precio), 0);
+
+                document.getElementById("totalProductos").textContent = totalProductos;
+                document.getElementById("totalPagar").textContent = totalPagar.toFixed(2);
+            }
+
+            // Cargar los productos en el catálogo al cargar la página
+            cargarProductos();
+
+            // Función para mostrar un mensaje en la página
+            function mostrarMensaje(mensaje) {
+                alert(mensaje);
+            }
+
+            // Resto del código...
+        });
+
+        // Función para eliminar un producto del carrito
+        function eliminarDelCarrito(index) {
+            let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+            carrito.splice(index, 1); // Eliminar el producto en la posición index del array
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            actualizarCarrito(); // Actualizar la visualización del carrito después de eliminar el producto
+        }
+    </script>
+
+<a href="index.html" id="back-to-top-btn">Regresar</a>
+
+
+
+    <script src="catalogo.js"></script>
+</body>
+</html>
